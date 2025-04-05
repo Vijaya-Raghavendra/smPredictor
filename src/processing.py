@@ -3,7 +3,7 @@ class Processor:
     def __init__(self, stock, saveDirectory, dataframe):
         self.stock          = stock
         self.saveDirectory  = saveDirectory
-        self.dataframe      = dataframe.drop({"High", "Low", "Dividends", "Stock Splits"}, axis = 1)
+        self.dataframe      = dataframe.drop({"Dividends", "Stock Splits"}, axis = 1)
         return
     
     def removeUnfilled(self):

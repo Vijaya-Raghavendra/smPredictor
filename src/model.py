@@ -1,7 +1,7 @@
 from deep_river.regression import RollingRegressorInitialized
+from src.dataHandler import DataLoaderAndSaver
 from src.lstmModule import LstmModule
 from river import metrics
-import pandas as pd
 import numpy as np
 
 
@@ -11,53 +11,90 @@ class StockPredictor:
     library and handles the training and predicting functionalities of the model.
     """
 
-    def __init__(self, n_features):
-        # self.model = RollingRegressorInitialized(
-        #     module=LstmModule(n_features, 16),
-        #     loss_fn="mse",
-        #     optimizer_fn="adam",
-        #     window_size=20,
-        #     lr=0.001,
-        #     append_predict=True,
-        # )
-        # self.metric = metrics.MAE()
-        pass
+    def __init__(self):
+        self.model      = None
+        self.dataloader = DataLoaderAndSaver()
+        self.metric     = metrics.MAE()
+        return
 
-    
     def prepareData(
-        self, dataframe: pd.DataFrame, toLagFeatures: list, lag: int, predictionVarList: str
+        self, lagList: list, lag: int, target: str, ticker: str, interval: str
     ):
-        # df = dataframe.copy()
-        # # creating the columns for the lag features
-        # for targetVar in toLagFeatures:
-        #     for i in range(1, lag + 1):
-        #         df[f"{targetVar}_{i}"] = df[targetVar].shift(i)
-        #     df.dropna(inplace=True)
+        """
+        Function to prepare the dataset to feed in the model. It also initializes the 
+        LSTM module used for prediction based on the number of features in the dataset.
+        
+        Returns: (xTrain, yTrain, xTest, yTest)
+        """
+        if interval == "5m":
+            temp = "Datetime"
+        else:
+            temp = "Date"
 
-        # # ------------------ change this -----------------------
-        # x = df.drop(columns=predictionVarList, axis=1)
-        # y = df["Close"]
-        # return x.to_dict(orient="records"), y.to_list()
-        pass
+        # load the data
+        df = self.dataloader.getProcessedData(ticker, interval).drop(columns=[temp], axis=1)
+        
+
+        # creating lag features
+        for targetVar in lagList:
+            for i in range(1, lag + 1):
+                df[f"{targetVar}_{i}"] = df[targetVar].shift(i)
+            df.dropna(inplace=True)
+        
+        # preparing dataset
+        x = df.drop(columns = [target] + ["Open"], axis=1).to_dict(orient="records")  # remove "Open" from the features, cause its not available
+        y = df["Close"].to_list()                                                     # target
+        
+        # test-train split
+        split           = int(len(x) * 0.9)
+        xTrain, yTrain  = x[:split], y[:split]
+        xTest, yTest    = x[split:], y[split:]
+
+        # initialize the model based on the number of features
+        n_features = len(xTrain[0])
+        self.initializeModel(n_features=n_features)
+
+        return xTrain, yTrain, xTest, yTest
+
+
+    def initializeModel(self, n_features):
+        self.model = RollingRegressorInitialized(
+            module=LstmModule(n_features, hidden_size=16),
+            loss_fn="mse",
+            optimizer_fn="adam",
+            window_size=20,
+            lr=0.001,
+            append_predict=True,
+        )
+        return
+
 
     def trainModel(self, x, y, epochs=10):
-        # for epoch in range(epochs):
-        #     epoch_loss = 0
-        #     for i in range(len(y)):
-        #         y_pred = self.model.predict_one(x[i])
-        #         loss = (y_pred - y[i]) ** 2
-        #         epoch_loss += loss
-        #         self.metric.update(y_true=y[i], y_pred=y_pred)
-        #         self.model.learn_one(x[i], y[i])
+        losses = []
+        for epoch in range(epochs):
+            epoch_loss = 0
+            for i in range(len(y)):
+                y_pred = self.model.predict_one(x[i])
+                loss = (y_pred - y[i]) ** 2
+                epoch_loss += loss
+                self.metric.update(y_true=y[i], y_pred=y_pred)
+                self.model.learn_one(x[i], y[i])
 
-        #     avg_loss = epoch_loss / len(y)
-        #     print(
-        #         f"Epoch {epoch + 1}/{epochs} - Loss: {avg_loss:.4f}, MAE: {self.metric.get():.4f}"
-        #     )
-        pass
+            avg_loss = epoch_loss / len(y)
+            losses.append(avg_loss)
+            print(
+                f"Epoch {epoch + 1}/{epochs} - Loss: {avg_loss:.4f}, MAE: {self.metric.get():.4f}"
+            )
+        return losses
 
-    def evaluate(self, X, y):
-        # y_pred = [self.model.predict_one(xi) for xi in X]
-        # mse = np.mean((np.array(y) - np.array(y_pred)) ** 2)
-        # return mse
-        pass
+    def evaluate(self, xTest, yTest):
+        """
+        Evaluates the model based on the test data. 
+        Returns: MSE and MAE.
+        """
+        y_pred = [self.model.predict_one(xi) for xi in xTest]
+        mse = np.mean((np.array(yTest) - np.array(y_pred)) ** 2)
+        mae = self.metric.get()
+        
+        print(f"Test MSE: {mse:.4f}, Test MAE: {mae:.4f}")
+        return mse, mae
