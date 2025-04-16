@@ -1,0 +1,218 @@
+\documentclass{article}
+\usepackage{graphicx}
+\usepackage{fancyhdr}
+\usepackage{float}
+\usepackage[hidelinks]{hyperref}
+\usepackage{letterspace}
+\usepackage{xcolor}
+\usepackage{pagecolor}
+\usepackage[a4paper, hmargin=1in, bottom=1in]{geometry}
+\usepackage{fontspec}
+\usepackage{amsmath}
+\usepackage{eso-pic}
+\usepackage{tikz}
+\usepackage{dirtree}
+\usepackage{enumitem}
+\usepackage{listings}
+\usepackage{xcolor}
+
+\usetikzlibrary{trees}
+\tikzstyle{every node}=[draw=gray, very thick, anchor=west]
+
+\lstdefinelanguage{bash}{
+    sensitive=true,
+    morekeywords={mkdir, python3, source, pip, python},
+    morecomment=[l]{\#},
+    morestring=[b]",
+}
+
+\lstset{
+    language=bash,
+    basicstyle=\ttfamily\small,
+    keywordstyle=\color{blue},
+    commentstyle=\color{gray},
+    stringstyle=\color{orange},
+    showstringspaces=false,
+    breaklines=true,
+    frame=single,
+    columns=fullflexible,
+}
+
+\usetikzlibrary{shapes.geometric, arrows}
+\setlist[itemize]{label=\Large$\bullet$}
+\tikzstyle{startstop} = [rectangle, rounded corners, minimum width=3cm, minimum
+height=1cm, text centered, draw=black, fill=red!30]
+\tikzstyle{process} = [rectangle, minimum width=3cm, minimum height=1cm, text
+centered, draw=black, fill=orange!30]
+\tikzstyle{arrow} = [thick,->,>=stealth]
+
+\setmainfont{Rajdhani}[BoldFont = Rajdhani Semibold]
+\definecolor{grey}{RGB}{40, 40, 40}
+\definecolor{section_color}{RGB}{0, 45, 98}
+\definecolor{subsection_color}{RGB}{0, 48, 143}
+\definecolor{subsubsection_color}{RGB}{0, 0, 255}
+\definecolor{text_color}{RGB}{50, 50, 50}
+\definecolor{bgcolor}{RGB}{240, 240, 240}
+
+\begin{document}
+
+\begin{titlepage}
+
+    \pagecolor{bgcolor}
+    \begin{center}
+
+        \includegraphics[width=0.7\textwidth]{/home/mradul/Pictures/globals/iitb_logo.png}
+
+        \vspace{100pt}
+
+        \makebox[\textwidth][c]{%
+            {\fontfamily{lmdh}\selectfont \fontsize{35}{45}\selectfont
+                    \textcolor{section_color}{\textls[40]{Project Report}}}
+        }
+        \
+        \vspace{10pt}
+
+        \makebox[\textwidth][c]{{\selectfont \fontsize{17}{10}\selectfont
+                    \textcolor{grey}{{Artificial Intelligence and Machine
+                                Learning}}}}
+
+        \vfill
+
+        {\fontsize{16}{30}\selectfont {\textcolor{grey}{Mradul Sonkar |
+                    Vijaya Raghavendra}}}\\
+        \vspace{5pt}
+        {\fontsize{16}{30}\selectfont {\textcolor{grey}{Instructor:
+                    Pushpak Bhattacharyya
+                }}}
+
+    \end{center}
+
+\end{titlepage}
+
+\nopagecolor\
+
+\section*{\fontsize{20}{20}\selectfont Idea:}
+
+ {\noindent \fontsize{12}{16}\selectfont We aim to develop a \textbf{real-time
+      stock market
+      price predictor} using an online learning approach. The core goal is to
+  build a
+  model that, given the past few intervals of stock data, can \textbf{predict
+      the
+      closing price of the next interval} and continuously \textbf{update
+      itself with
+      new data} as it arrives.
+
+  Traditional time series models rely on batch learning and require
+  retraining
+  when new data is available. In contrast, our approach leverages
+  \textbf{incremental learning} using the \texttt{deep\_river} library,
+  which
+  allows the model to \textbf{learn and predict in a streaming fashion},
+  making
+  it suitable for dynamic financial environments.
+
+  We use:
+  \begin{itemize}
+      \item A custom \textbf{LSTM model built in PyTorch}, trained to learn
+            temporal dependencies in stock price movement.
+      \item The LSTM is wrapped inside \textbf{\texttt{deep\_river}'s\space
+                \texttt{RollingRegressor}}, enabling online training.
+      \item The model takes input features such as \texttt{Open},
+            \texttt{Close},
+            \texttt{High}, \texttt{Low}, and \texttt{Volume}, along with
+            their lagged
+            values (e.g., Open$_{t-1}$, Volume$_{t-2}$).
+      \item For each time step, it predicts the next closing price and
+            updates
+            its weights using the true observed price.
+  \end{itemize}
+
+  The stock data is fetched dynamically using the \texttt{yfinance} API,
+  allowing the model to operate on real-time or historical data streams.
+
+ }
+
+\section*{\fontsize{20}{20}\selectfont Structure:}
+
+{\fontsize{14}{20} \selectfont The source code of the project can be found
+\textbf{\href{https://drive.google.com/file/d/1W9iylU5aluezGqYUcOf1AgIQyAChNvWV}{here}.} Follow the following instructions to setup the project.
+\dirtree{%
+    .1 ..
+    .2 main.ipynb.
+    .2 main.py.
+    .2 README.md.
+    .2 requirements.txt.
+    .2 data/.
+    .3 raw/.
+    .3 processed/.
+    .2 src/.
+    .3 dataHandler.py.
+    .3 lstmModule.py.
+    .3 model.py.
+    .3 processing.py.
+    .3 tickers.json.
+}
+}
+\newpage
+
+\begin{itemize}
+    \item \texttt{main.ipynb}: Jupyter notebook version of main.py.
+    \item \texttt{main.py}: Starting point of the project.
+    \item \texttt{README.md}: Instructions to use the project.
+    \item \texttt{src/}: Source folder containing all files.
+    \item \texttt{tickers.json}: JSON file containing all the tickers for which
+          we are fetching the data.
+\end{itemize}
+
+\vspace{8.0pt}
+
+\section*{\fontsize{20}{20}\selectfont Usage:}
+\begin{itemize}
+    \item Start by creating a virtual environment, name it \textbf{project},
+          and activate it.
+          \begin{lstlisting}[language=bash]
+            python3 -m venv project
+            source project/bin/activate
+            pip install -r requirements.txt
+        \end{lstlisting}
+    \item Create the folders to fetch the data in, name it \textbf{data}.
+          \begin{lstlisting}[language=bash]
+                mkdir data
+                mkdir data/raw
+                mkdir data/processed
+            \end{lstlisting}
+    \item Run the file \textbf{main.py} or optionally \textbf{main.ipynb} for
+          more analysis.
+          \begin{lstlisting}
+                python main.py
+            \end{lstlisting}
+
+\end{itemize}
+
+\section*{\fontsize{20}{20}\selectfont Current Progress and Future
+  PoA}
+
+ {\noindent \fontsize{12}{16}\selectfont
+  So far, we have developed a model to predict future stock prices using an
+  LSTM-based architecture wrapped in a rolling regressor. The model takes
+  historical stock data as input and outputs a predicted price for the upcoming
+  interval.
+  \\[0.3cm]
+  \noindent Future improvements include:
+  \begin{itemize}
+      \item Fetching current financial news from online sources and analyzing
+            its
+            impact on price movements.
+      \item Implementing functionality to fetch real-time stock prices at
+            regular
+            intervals (e.g., every minute).
+      \item Developing a simple user interface to visualize predicted and
+            actual
+            price movements on graphs. This interface could be built using
+            Flask
+            or a
+            similar lightweight web framework.
+  \end{itemize}}
+
+\end{document}

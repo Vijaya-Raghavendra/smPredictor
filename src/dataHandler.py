@@ -24,8 +24,8 @@ class DataLoaderAndSaver:
         tickerList  = self.loadList()
         dataframe   = dict()
         for ticker in tickerList:
-            stock   = yf.Ticker(ticker=ticker)
-            df      = stock.history(period = period, interval = interval)
+            stock    = yf.Ticker(ticker=ticker)
+            df       = stock.history(period = period, interval = interval)
             dataframe[ticker] = df
         return dataframe
 

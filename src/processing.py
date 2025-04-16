@@ -31,7 +31,7 @@ class Processor:
         Process and save the processed data in the given directory
         """
         self.removeUnfilled()
-        self.standardize()
+        # self.standardize()
         if interval == "1d":
             self.dataframe.set_index("Date", inplace=True)
         else:

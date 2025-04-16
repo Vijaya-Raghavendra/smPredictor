@@ -1,0 +1,11 @@
+.
+├── main.ipynb
+├── main.py
+├── README.md
+├── requirements.txt
+└── src
+    ├── dataHandler.py
+    ├── lstmModule.py
+    ├── model.py
+    ├── processing.py
+    └── tickers.json
