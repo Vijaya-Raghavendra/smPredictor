@@ -1,4 +1,4 @@
-from deep_river.regression import RollingRegressorInitialized
+from deep_river.regression import RollingRegressorInitialized  # type: ignore
 from src.dataHandler import DataLoaderAndSaver
 from src.lstmModule import LstmModule
 from river import metrics
@@ -29,24 +29,15 @@ class StockPredictor:
     def prepareData(
         self, lagList: list, lag: int, target: str, ticker: str, interval: str
     ):
-        """
-        Function to prepare the dataset to feed in the model. It also initializes the
-        LSTM module used for prediction based on the number of features in the dataset.
-
-        Returns: (xTrain, yTrain, xTest, yTest)
-        """
         if interval == "5m":
             temp = "Datetime"
         else:
             temp = "Date"
 
-        # load the data
         df = self.dataloader.getProcessedData(ticker, interval).drop(
             columns=[temp], axis=1
         )
-        print(df)
 
-        # creating lag features
         for targetVar in lagList:
             for i in range(1, lag + 1):
                 df[f"{targetVar}_{i}"] = df[targetVar].shift(i)
@@ -57,39 +48,33 @@ class StockPredictor:
                 continue
             df[column] = self.standardize(df[column])
 
-        print(df)
+        x = df.drop(columns=[target, "Open"], axis=1).to_dict(orient="records")
+        y = df["Close"].to_list()
 
-        # preparing dataset
-        x = df.drop(columns=[target] + ["Open"], axis=1).to_dict(
-            orient="records"
-        )  # remove "Open" from the features, cause its not available
-        y = df["Close"].to_list()  # target
-
-        # test-train split
-        split = int(len(x) * 0.9)
-        xTrain, yTrain = x[:split], y[:split]
-        xTest, yTest = x[split:], y[split:]
-
-        # initialize the model based on the number of features
-        n_features = len(xTrain[0])
+        n_features = len(x[0])
         self.initializeModel(n_features=n_features)
 
-        return xTrain, yTrain, xTest, yTest
+        return x, y, df
 
     def initializeModel(self, n_features):
         self.model = RollingRegressorInitialized(
             module=LstmModule(n_features, hidden_size=16),
             loss_fn="mse",
             optimizer_fn="adam",
-            window_size=20,
-            lr=0.001,
+            window_size=50,
+            lr=0.01,
             append_predict=True,
         )
         return
 
     def trainModel(self, st, x, y, epochs=10):
-        losses = []
+        mseloss  = []
+        maeloss = []
+        progress = st.progress(0)
+        status = st.empty()
         for epoch in range(epochs):
+            status.markdown(f"##### 🔄 Training in progress... **[{epoch + 1}/{epochs}]**")
+            progress.progress((epoch + 1) / epochs)
             epoch_loss = 0
             for i in range(len(y)):
                 y_pred = self.model.predict_one(x[i])
@@ -99,17 +84,12 @@ class StockPredictor:
                 self.model.learn_one(x[i], y[i])
 
             avg_loss = epoch_loss / len(y)
-            losses.append(avg_loss)
-            if st:  # Check if st is passed
-                st.write(
-                    f"Epoch {epoch + 1}/{epochs} - Loss: {avg_loss:.4f}, MAE: {self.metric.get():.4f}"
-                )
-            else:
-                print(
-                    f"Epoch {epoch + 1}/{epochs} - Loss: {avg_loss:.4f}, MAE: {self.metric.get():.4f}"
-                )
+            mseloss.append(avg_loss)
+            maeloss.append(self.metric.get())
 
-        return losses
+        progress.empty()
+        status.empty()
+        return (maeloss, mseloss)
 
     def evaluate(self, xTest, yTest):
         """
