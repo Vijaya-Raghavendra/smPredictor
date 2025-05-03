@@ -557,6 +557,12 @@ INPUT /usr/share/texlive/texmf-dist/fonts/tfm/public/amsfonts/symbols/msbm10.tfm
 INPUT ./model3.png
 INPUT ./model3.png
 INPUT ./model3.png
+INPUT ./error.png
+INPUT ./error.png
+INPUT ./error.png
+INPUT ./predict.png
+INPUT ./predict.png
+INPUT ./predict.png
 OUTPUT main.nav
 OUTPUT main.toc
 OUTPUT main.snm

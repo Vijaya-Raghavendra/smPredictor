@@ -140,7 +140,7 @@ if st.button("🔁 Start Prediction"):
     xTest = x[split_idx:]
     yTest = y[split_idx:]
 
-    maeLoss, mseLoss = model.trainModel(st, xTrain, yTrain, 3)
+    maeLoss, mseLoss = model.trainModel(st, xTrain, yTrain, 30)
 
     # History for plotting
     history = df["Close"].tolist()

@@ -1,4 +1,4 @@
-This is LuaHBTeX, Version 1.14.0 (TeX Live 2022/dev/Debian)  (format=lualatex 2025.3.2)  30 APR 2025 00:21
+This is LuaHBTeX, Version 1.14.0 (TeX Live 2022/dev/Debian)  (format=lualatex 2025.3.2)  3 MAY 2025 20:50
  restricted system commands enabled.
  file:line:error style messages enabled.
 **/home/mradul/Desktop/Sem04/CS240/Project/presentation/main.tex
@@ -948,11 +948,11 @@ Package fontspec Info: Font family 'FiraSansLight(1)' created for font 'Fira
 (fontspec)             - 'bold italic small caps'  (b/scit) with NFSS spec.:
 (fontspec)             <->"FiraSansItalic:mode=node;script=latn;language=dflt;+tlig;+tnum;+smcp;"
 
-LaTeX Font Info:    Trying to load font information for U+msa on input line 58.
+LaTeX Font Info:    Trying to load font information for U+msa on input line 61.
  (/usr/share/texlive/texmf-dist/tex/latex/amsfonts/umsa.fd
 File: umsa.fd 2013/01/14 v3.01 AMS symbols A
 )
-LaTeX Font Info:    Trying to load font information for U+msb on input line 58.
+LaTeX Font Info:    Trying to load font information for U+msb on input line 61.
  (/usr/share/texlive/texmf-dist/tex/latex/amsfonts/umsb.fd
 File: umsb.fd 2013/01/14 v3.01 AMS symbols B
 ) [4
@@ -967,25 +967,45 @@ File: umsb.fd 2013/01/14 v3.01 AMS symbols B
 
 ] [9
 
+] [10
+
+] [11
+
 ]
-<model3.png, id=68, 536.60475pt x 447.47176pt>
+<model3.png, id=79, 536.60475pt x 447.47176pt>
 File: model3.png Graphic file (type png)
 <use model3.png>
-Package luatex.def Info: model3.png  used on input line 150.
+Package luatex.def Info: model3.png  used on input line 180.
 (luatex.def)             Requested size: 223.07053pt x 186.01822pt.
- [10
+ [12
 
-<./model3.png>] [11
-
-] [12
-
-] [13
+<./model3.png>] [13
 
 ] [14
 
-] [15
+]
+<error.png, id=96, 916.42375pt x 738.76pt>
+File: error.png Graphic file (type png)
+<use error.png>
+Package luatex.def Info: error.png  used on input line 217.
+(luatex.def)             Requested size: 195.18512pt x 157.34232pt.
+ [15
 
-] [16
+<./error.png>]
+<predict.png, id=103, 870.25125pt x 445.665pt>
+File: predict.png Graphic file (type png)
+<use predict.png>
+Package luatex.def Info: predict.png  used on input line 227.
+(luatex.def)             Requested size: 223.07053pt x 114.2381pt.
+ [16
+
+<./predict.png>] [17
+
+] [18
+
+] [19
+
+] [20
 
 ]
 \tf@nav=\write6
@@ -1003,19 +1023,19 @@ Package rerunfilecheck Info: File `main.out' has not changed.
 )
 
 Here is how much of LuaTeX's memory you used:
- 29061 strings out of 477805
+ 29097 strings out of 477805
  125031,953878 words of node,token memory allocated
  1001 words of node memory still in use:
    13 hlist, 6 vlist, 2 rule, 1 local_par, 18 glue, 6 kern, 8 penalty, 10 glyph, 28 attribute, 70 glue_spec, 28 attribute_list, 4 write, 4 pdf_colorstack nodes
-   avail lists: 1:5,2:384,3:163,4:146,5:369,6:22,7:1984,8:9,9:324,10:13,11:183
- 48337 multiletter control sequences out of 65536+600000
+   avail lists: 1:6,2:404,3:163,4:146,5:384,6:22,7:2101,8:9,9:348,10:13,11:183
+ 48357 multiletter control sequences out of 65536+600000
  86 fonts using 20013919 bytes
  128i,11n,131p,1900b,615s stack positions out of 5000i,500n,10000p,200000b,80000s
 </usr/share/texlive/texmf-dist/fonts/opentype/public/fira/FiraMono-Regular.otf></usr/share/texlive/texmf-dist/fonts/opentype/public/fira/FiraSans-LightItalic.otf></usr/share/texlive/texmf-dist/fonts/opentype/public/fira/FiraSans-Light.otf></usr/share/texlive/texmf-dist/fonts/opentype/public/fira/FiraSans-Regular.otf></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmss9.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmsy8.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmsy9.pfb>
-Output written on main.pdf (16 pages, 687379 bytes).
+Output written on main.pdf (20 pages, 731840 bytes).
 
-PDF statistics: 147 PDF objects out of 1000 (max. 8388607)
- 104 compressed objects within 2 object streams
- 33 named destinations out of 1000 (max. 131072)
+PDF statistics: 171 PDF objects out of 1000 (max. 8388607)
+ 120 compressed objects within 2 object streams
+ 41 named destinations out of 1000 (max. 131072)
  16 words of extra memory for PDF output out of 10000 (max. 100000000)
 

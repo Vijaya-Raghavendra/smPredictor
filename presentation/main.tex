@@ -34,18 +34,21 @@
     \textbf{Input:}
     \begin{table}[h!]
         \centering
-        \begin{tabular}{|c|c|c|c|}
+        \begin{tabular}{|c|c|c|c|c|}
             \hline
-            \textbf{Time} & \textbf{Open Price} & \textbf{Close Price} &
-            \textbf{Volume}
+            \textbf{Time}   & \textbf{Open Price}      & \textbf{Close Price} &
+            \textbf{Volume} & \textbf{Lagged Features}
             \\
             \hline
-            $t-2$         & 101.25              & 102.10               &
-            1205000                                                      \\
-            $t-1$         & 102.30              & 101.80               &
-            1150000                                                      \\
-            $t$           & 101.90              & 102.50               &
-            1234000                                                      \\
+            $t-2$           & 101.25                   & 102.10               &
+            1205000         & \dots
+            \\
+            $t-1$           & 102.30                   & 101.80               &
+            1150000         & \dots
+            \\
+            $t$             & 101.90                   & 102.50               &
+            1234000         & \dots
+            \\
             \hline
         \end{tabular}
     \end{table}
@@ -73,6 +76,8 @@
 \end{frame}
 
 \begin{frame}{Motivation}
+    \noindent {\LARGE \textbf{Why did we choose this problem?}}\\[0.3cm]
+
     The idea for this project originated from a previously suggested stock
     market prediction task in the CS240 course, which was based on old and
     static
@@ -87,25 +92,49 @@
     decisions are crucial.
 \end{frame}
 
-\begin{frame}{Dataset}
+\begin{frame}{Motivation}
+    \noindent {\LARGE \textbf{What makes it interesting, impactful, or
+            challenging?}}\\[0.3cm]
 
+    Financial markets are influenced by various dynamic factors which makes
+    them interesting.  Accurate predictions can help investors and financial
+    planners making it impactful. Stock market prediction is challenging as it
+    requires capturing temporal dependencies and reacting to sudden market changes.
+
+\end{frame}
+
+\begin{frame}{Motivation}
+    \noindent {\LARGE \textbf{Is there a real-world application or gap this
+            project addresses?}}\\[0.3cm]
+
+    Yes, this project bridges the gap between traditional statistical models
+    and deep learning-based sequence models for stock forecasting. Most retail
+    investors lack access to robust forecasting tools—this app/program brings
+    predictive insights to their fingertips.
+
+\end{frame}
+
+\begin{frame}{Problem Statement}
     \noindent {\LARGE \textbf{Example}}\\[0.3cm]
 
     \textbf{Input:}
     \begin{table}[h!]
         \centering
-        \begin{tabular}{|c|c|c|c|}
+        \begin{tabular}{|c|c|c|c|c|}
             \hline
-            \textbf{Time} & \textbf{Open Price} & \textbf{Close Price} &
-            \textbf{Volume}
+            \textbf{Time}   & \textbf{Open Price}      & \textbf{Close Price} &
+            \textbf{Volume} & \textbf{Lagged Features}
             \\
             \hline
-            $t-2$         & 101.25              & 102.10               &
-            1205000                                                      \\
-            $t-1$         & 102.30              & 101.80               &
-            1150000                                                      \\
-            $t$           & 101.90              & 102.50               &
-            1234000                                                      \\
+            $t-2$           & 101.25                   & 102.10               &
+            1205000         & \dots
+            \\
+            $t-1$           & 102.30                   & 101.80               &
+            1150000         & \dots
+            \\
+            $t$             & 101.90                   & 102.50               &
+            1234000         & \dots
+            \\
             \hline
         \end{tabular}
     \end{table}
@@ -114,12 +143,13 @@
     \begin{center}
         Predicted Close Price at $t+1$ = \textbf{102.85}
     \end{center}
-\end{frame}
 
+\end{frame}
 
 \begin{frame}{Dataset}
     \noindent {\LARGE \textbf{Source}}\\[0.3cm]
-    The data is collected using the \texttt{yfinance} Python API from Yahoo Finance.\\[0.15cm]
+    The data is collected using the \texttt{yfinance} Python API from Yahoo
+    Finance.\\[0.15cm]
     \textbf{Citation:}
     \href{https://pypi.org/project/yfinance/}{Yahoo Finance API}
 
@@ -149,7 +179,6 @@
     \end{figure}
 \end{frame}
 
-
 \begin{frame}{Methodology}
     \noindent {\LARGE \textbf{Intuition}}\\[0.3cm]
 
@@ -177,30 +206,61 @@
 
 \end{frame}
 
-% \begin{frame}{Learnings}
-%     \noindent {\LARGE \textbf{Technical Learnings}}\\[0.3cm]
-%         Through this project, we gained in-depth experience with time series forecasting, particularly using LSTM (Long Short-Term Memory) networks. We learned how to preprocess financial data, integrate multiple features such as open, close, and volume prices, and handle issues related to missing data and noise. We also learnt using libraries like \textbf{PyTorch} for implementing neural networks and \textbf{deep_rive} rolling regressors for real-time prediction.
-% \end{frame}
+
+\begin{frame}{Results}
+    \noindent {\LARGE \textbf{Performance Metrics}}\\[0.3cm]
+    \begin{figure}[htbp]
+        \centering
+        \includegraphics[width=0.7\textwidth]{error.png}
+        \caption{Error vs Epochs}
+    \end{figure}
+\end{frame}
+
+
+\begin{frame}{Results}
+    \noindent {\LARGE \textbf{Predictions}}\\[0.3cm]
+    \begin{figure}[htbp]
+        \centering
+        \includegraphics[width=0.8\textwidth]{predict.png}
+        \caption{Actual vs. Predicted Values}
+    \end{figure}
+\end{frame}
+
 
 \begin{frame}{Learnings}
     \noindent {\LARGE \textbf{Technical Learnings}}\\[0.3cm]
-    Through this project, we gained in-depth experience with time series forecasting, particularly using LSTM (Long Short-Term Memory) networks. We learned how to preprocess financial data, integrate multiple features such as open, close, and volume prices, and handle issues related to missing data and noise. We also learnt using libraries like \textbf{PyTorch} for implementing neural networks and \textbf{deep-river} rolling regressors for real-time prediction.
+    Through this project, we gained in-depth experience with time series
+    forecasting, particularly using LSTM (Long Short-Term Memory) networks. We
+    learned how to preprocess financial data, integrate multiple features such as
+    open, close, and volume prices, and handle issues related to missing data and
+    noise. We also learnt using libraries like \textbf{PyTorch} for implementing
+    neural networks and \textbf{deep-river} rolling regressors for real-time
+    prediction.
 \end{frame}
 
 \begin{frame}{Learnings}
     \noindent {\LARGE \textbf{Problem-Solving}}\\[0.3cm]
-    We learned how to approach real-world problems where data is dynamic, unstructured, and noisy. Addressing issues like overfitting, underfitting, and hyperparameter tuning taught us the importance of balancing model complexity with performance. Experimenting with different architectures (e.g., bidirectional LSTMs) enhanced my problem-solving skills in a dynamic and unpredictable environment like the stock market.
+    We learned how to approach real-world problems where data is dynamic,
+    unstructured, and noisy. Addressing issues like overfitting, underfitting, and
+    hyperparameter tuning taught us the importance of balancing model complexity
+    with performance. Experimenting with different architectures (e.g.,
+    bidirectional LSTMs) enhanced my problem-solving skills in a dynamic and
+    unpredictable environment like the stock market.
 \end{frame}
 
 \begin{frame}{Learnings}
     \noindent {\LARGE \textbf{Experimentation}}\\[0.3cm]
-    The project involved continuous experimentation with model parameters, training strategies, and input features to improve prediction accuracy. I learned the importance of tracking results, analyzing errors, and refining hypotheses to iterate toward the best solution. This experimental mindset is essential for refining machine learning models and optimizing them for deployment.
+    The project involved continuous experimentation with model parameters,
+    training strategies, and input features to improve prediction accuracy. We
+    learned the importance of tracking results, analyzing errors, and refining
+    hypotheses to iterate toward the best solution. This experimental mindset is
+    essential for refining machine learning models and optimizing them for
+    deployment.
 \end{frame}
 
 \begin{frame}[c]
     \centering
     {\Huge \textbf{Thank You!}}\\[1cm]
 \end{frame}
-
 
 \end{document}
